@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,7 @@ public class ScriptDecisionMover2 : MonoBehaviour {
 	private const float speed_base = 30f;
 
 	private const float alpha_conditional = 0.999f;
+	private const float alpha_ideal_center_decay = 1.000f;
 	private const float alpha_ideal_center = 0.999f;
 	private const float speed_bonus_escape = 5f;
 	private const float rotation_scalar = 4f;
@@ -47,7 +48,7 @@ public class ScriptDecisionMover2 : MonoBehaviour {
 		float h = Mathf.Clamp(Vector3.Dot(transform.forward, heading.normalized), 0.1f, 1f);
 
 		// decay toward Vector3.zero, but offset slightly by a point behind self
-		ideal_center = alpha_ideal_center * ideal_center + (1 - alpha_ideal_center) * (transform.localPosition - transform.forward);
+		ideal_center = alpha_ideal_center * alpha_ideal_center_decay * ideal_center + (1 - alpha_ideal_center) * (transform.localPosition);
 
 		// rotate toward heading described by plane-separator
 		// rotate faster when misaligned, rotate slower when aligned
